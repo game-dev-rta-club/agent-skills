@@ -1,7 +1,7 @@
 {
   "name": "rubber-duck-for-codex",
-  "version": "0.2.3",
-  "description": "Rubber-ducking skills for checkpointed Codex reasoning and better-nearby quality checks.",
+  "version": "0.3.0",
+  "description": "Rubber-ducking skills with focused dialogue orchestration and independent quality review.",
   "author": {
     "name": "nikollson",
     "url": "https://github.com/nikollson"
@@ -12,7 +12,7 @@
   "interface": {
     "displayName": "Rubber Duck For Codex",
     "shortDescription": "Checkpoint Codex reasoning with a quality partner.",
-    "longDescription": "Rubber Duck For Codex adds two skills: one to open, checkpoint, and close a rubber-ducking dialogue during non-trivial turns, and one to act as the partner that checks drafts, decisions, evidence, drift, user-request fulfillment, and whether a meaningfully better nearby answer is still available.",
+    "longDescription": "Rubber Duck For Codex adds two focused skills: one orchestrates open, checkpoint, and close dialogue during non-trivial turns, while the independent partner checks drafts, decisions, evidence, drift, user-request fulfillment, solution convergence, and unsupported fallbacks.",
     "developerName": "nikollson",
     "category": "Productivity",
     "capabilities": [

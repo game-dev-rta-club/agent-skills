@@ -5,7 +5,7 @@ description: Use at the beginning of any non-trivial turn that involves reasonin
 
 # Rubber Ducking
 
-Use a fresh thinking partner to counterbalance common AI-agent failure modes throughout a non-trivial turn. The partner is not the decision-maker; they help you catch premature convergence, straight-line reasoning, missed or overlapping considerations, weak evidence, incomplete fulfillment of the user's actual request, and stopping at the first merely acceptable answer when a meaningfully better nearby answer may exist.
+Run a fresh thinking-partner dialogue throughout a non-trivial turn. This skill owns the dialogue lifecycle and context transfer. The partner owns the quality criteria and applies `rubber-duck-partner`; the caller remains responsible for the work and final answer.
 
 When a partner task inherits earlier chat history from a fork, assume the partner experiences the old text as one continuous conversation until your new prompt arrives. Make the context switch explicit: separate inherited history from the new partner task, and state that the next section is addressed to the receiving agent.
 
@@ -41,7 +41,7 @@ Open -> Checkpoint* -> Close
    - intended outcome and success criteria
    - your initial plan, hypothesis, or decision point
    - known risks, uncertainties, or evidence gaps
-   - what you want checked, including whether the current direction is only acceptable or can be made materially better within the user's goal
+   - what changed or remains uncertain
 
 2. Start a fresh partner dialogue.
    - Ask the partner to use `rubber-duck-partner`.
@@ -50,11 +50,11 @@ Open -> Checkpoint* -> Close
    - Keep the prompt self-contained. Do not rely on forked context for the draft, evidence, current-turn commentary, or decision point; include those explicitly in the prompt under the required labels.
    - Tell the partner not to start another delegation loop; their next response is the deliverable.
 
-3. Match the pressure to the dialogue moment.
-   Use a light Open contract, a focused Checkpoint contract, and a deeper Close contract:
-   - Open: prevent premature narrowing by calibrating the request, success criteria, early watchpoints, likely evidence gaps, and when to checkpoint. Keep the quality stance visible, but do not brainstorm extra solutions before there is enough evidence.
-   - Checkpoint: inspect new evidence, drift, changed assumptions, missing coverage, overlapping solution paths, missing results, the smallest useful adjustment, and any high-leverage nearby improvement that would make the work simpler, safer, clearer, smaller, more complete, more maintainable, or more aligned with the user.
-   - Close: inspect the proposed final answer against the user's requested outcome, concrete completion criteria, evidence, omissions, unnecessary detail, work being marked complete too early, and whether the answer settles for acceptable quality when a materially better within-scope answer is still nearby.
+3. Set the dialogue moment.
+   - Open: send the request, success criteria, initial direction, uncertainty, and evidence needs before substantive work.
+   - Checkpoint: send only the new evidence, changed plan, decision, or uncertainty since the previous exchange.
+   - Close: send the concrete results and proposed final answer before replying to the user.
+   - Ask the partner to apply the matching phase contract from `rubber-duck-partner`. Do not copy its quality policy into this orchestration skill.
 
 4. Checkpoint when the work evolves.
    Send a short follow-up with explicit new context when:
@@ -100,7 +100,7 @@ Definitions:
 
 This request is addressed to you, the agent receiving this message.
 Your next response is the deliverable for this request.
-Your role is to act here as the rubber duck partner: read the caller's draft, plan, or decision point and check for common AI-agent failure modes, including premature convergence, straight-line reasoning, missed or overlapping considerations, weak evidence, incomplete fulfillment of the user's actual request, and stopping at the first acceptable answer instead of looking for a meaningfully better nearby answer.
+Your role is to act here as the rubber duck partner: independently review the caller's draft, plan, evidence, or decision point using the quality criteria and phase contract in `rubber-duck-partner`.
 This is not a request to arrange, delegate, implement, continue the caller's task, or run a separate verification workflow.
 
 Use rubber-duck-partner.
@@ -124,57 +124,10 @@ New context since last checkpoint:
 [for Checkpoint and Close, paste new evidence, progress, revised plan, or draft changes; for Open, write "none"]
 
 Specific checks requested:
-[paste the phase-specific bullet list below]
+[write "Apply the rubber-duck-partner contract for this dialogue moment", plus any task-specific concern that is not already in the skill]
 ```
 
 Avoid shorthand such as "parent thread" unless the prompt defines it. Prefer "caller", "forked conversation", "inherited history", and "this new request" so the partner does not confuse their role with running another subagent.
-
-### Open Checks
-
-Use Open before substantive work begins. Keep it light but sharp. Ask the partner to calibrate the starting direction and catch premature narrowing, not to review a final answer. In Open, do not ask the partner to fill Close or Checkpoint fields unless a concrete draft or result already exists and you explicitly need that review.
-
-```text
-- Restate the user's actual request and success criteria in one or two lines.
-- Name 1-3 early watchpoints, such as scope drift, missing constraints, premature conclusions, overlapping solution paths, or likely evidence gaps.
-- Say what evidence or result would matter most before the caller commits to an answer.
-- If a quality improvement axis is already obvious, name it briefly; otherwise avoid inventing extra directions before evidence exists.
-- Suggest when the caller should checkpoint next.
-- Ask at most one blocking question. If none is needed, say so.
-```
-
-For Open, avoid asking whether a draft fully answers the user, whether the result was reported, or what final wording should be revised unless a concrete draft already exists. A normal Open response should be short, often 5-8 bullets total.
-
-### Checkpoint Checks
-
-Use Checkpoint after evidence, work state, uncertainty, or decisions change.
-
-```text
-- Has the work drifted away from the user's original request or success criteria?
-- Does the new evidence support the current direction, or does it change the plan?
-- Is the caller converging too early, missing key alternatives, or duplicating/overlapping solution paths?
-- What concrete result, verification, comparison, or artifact is still missing?
-- Is the current direction merely acceptable, or is there a simpler, safer, clearer, smaller, more complete, more maintainable, or more user-aligned version nearby?
-- Name at most 1-2 high-leverage within-scope improvement ideas worth considering now; if none are material, say so.
-- What should be removed, narrowed, or de-emphasized before continuing?
-- What is the smallest useful next adjustment?
-- Is another checkpoint needed? If yes, when?
-```
-
-### Close Checks
-
-Use Close before replying to the user.
-
-```text
-- Does the proposed final answer fully answer what the user asked for?
-- Are any requested conditions unmet or replaced by a safer but different answer?
-- If the user asked for investigation, execution, verification, comparison, or a concrete decision, does the answer report the concrete result?
-- Has the caller considered enough alternatives, coverage, and evidence for the user's actual request?
-- Does the answer settle for first-pass acceptable quality, or is there a meaningfully better nearby version within the user's goal?
-- If improvement ideas exist, are they high-leverage and bounded to the user's request rather than interesting scope expansion?
-- Is the answer honest about verification, uncertainty, or remaining risk?
-- Has the work drifted away from the original user request?
-- What should be changed, removed, or clarified before replying to the user?
-```
 
 ## Partner Context Modes
 
@@ -191,8 +144,6 @@ Keep the dialogue bounded and useful:
 
 - Prefer short, concrete partner prompts.
 - Pass later context explicitly in follow-up messages; existing partner threads do not automatically receive caller-side context added after the fork.
-- Ask the partner to identify what to improve or remove, not only what to add.
-- Treat "better nearby" ideas as bounded quality pressure: adopt only improvements that materially change quality, risk, usability, maintainability, or alignment, and label interesting expansions as scope drift.
 - Preserve raw thread links or agent ids only when the user wants to inspect the conversation, when validating this skill itself, or when the task specifically requires audit evidence.
 - When validating this skill itself, preserve the partner thread id and one-line outcome evidence.
 - Close completed partner agents to keep the subagent list tidy.
