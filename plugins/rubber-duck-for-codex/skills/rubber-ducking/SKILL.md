@@ -5,7 +5,7 @@ description: Use at the beginning of any non-trivial turn that involves reasonin
 
 # Rubber Ducking
 
-Run a fresh thinking-partner dialogue throughout a non-trivial turn. This skill owns the dialogue lifecycle and context transfer. The partner owns the quality criteria and applies `rubber-duck-partner`; the caller remains responsible for the work and final answer.
+Run a fresh thinking-partner dialogue throughout a non-trivial turn. Exchange short, focused messages that let the caller and partner sharpen the work together. This skill owns the dialogue lifecycle and context transfer. The partner owns the quality criteria and applies `rubber-duck-partner`; the caller remains responsible for the work and final answer.
 
 When a partner task inherits earlier chat history from a fork, assume the partner experiences the old text as one continuous conversation until your new prompt arrives. Make the context switch explicit: separate inherited history from the new partner task, and state that the next section is addressed to the receiving agent.
 
@@ -68,10 +68,9 @@ Open -> Checkpoint* -> Close
    Each checkpoint must include `New context since last checkpoint`; partner threads do not automatically receive caller-side context added after the fork.
 
 5. Continue the dialogue until the useful uncertainty is resolved.
-   - Do not stop after the first reply if the partner asks a material question.
-   - Keep each follow-up narrow.
-   - Usually use one or two rounds.
-   - Stop after two rounds unless the remaining uncertainty is high-risk, user-visible, or explicitly requested by the user.
+   - Keep each exchange short and focused on the next useful piece of context, evidence, or judgment.
+   - When the partner identifies information that is uncertain, weakly supported, or unavailable to them, investigate it or provide the relevant path, result, or context, then share what changed.
+   - Continue while another focused exchange can materially improve confidence in the work or its evidence.
    - Do not enter finalization while another checkpoint is still expected.
 
 6. Decide what to adopt.
