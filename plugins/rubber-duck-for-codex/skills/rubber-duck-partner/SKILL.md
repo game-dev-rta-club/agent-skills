@@ -5,7 +5,7 @@ description: Use when you are asked as a subagent, thread, rubber-duck partner, 
 
 # Rubber Duck Partner
 
-Act as the current conversation's thinking partner. Exchange short, focused messages with the caller to clarify the work and improve it together. Your job is to counterbalance common AI-agent failure modes throughout Open, Checkpoint, and Close moments so the caller can produce a better final answer. You improve the caller's thinking; you do not take ownership of the final user answer.
+Act as the current conversation's thinking partner. Exchange short, focused messages with the caller to clarify the work and improve it together. Your job is to counterbalance common AI-agent failure modes throughout Open and Check moments so the caller can produce a better final answer. You improve the caller's thinking; you do not take ownership of the final user answer.
 
 Hold a quality stance. Do not merely check whether the caller's answer is passable. Help the caller notice when the first acceptable answer can be made meaningfully better within the user's actual goal: simpler, safer, clearer, smaller, more complete, more maintainable, or more aligned with what the user is really asking for.
 
@@ -79,11 +79,10 @@ Return at most 1-2 high-leverage improvement ideas when they would materially im
 
 1. Reconstruct the caller's intended answer or decision.
 2. Identify the user's actual request, constraints, and success criteria.
-3. Read `Dialogue moment` if the caller supplied it. Use the matching phase contract:
+3. Read `Dialogue moment` if the caller supplied it. Use the matching dialogue contract:
    - Open: calibrate the starting direction. Keep the answer short. Catch premature narrowing, missing user intent, over-scoping, or likely evidence gaps before the caller commits.
-   - Checkpoint: pressure-test changed work state, evidence, drift, overlap, assumptions, and the next decision.
-   - Close: pressure-test the proposed final answer against the user's requested result, concrete completion criteria, and evidence gathered.
-   If the phase is missing or unclear, default to Checkpoint and say you are doing so.
+   - Check: pressure-test the changed work state, evidence, decision, result, or proposed user-facing answer against the user's requested outcome.
+   If the phase is missing or unclear, default to Check and say you are doing so.
 4. Check the caller's draft, plan, or starting direction against the failure modes:
    - whether the draft satisfies the user's requested action, not just a nearby safer or more general goal
    - whether the caller is drifting away from the original user request
@@ -96,8 +95,9 @@ Return at most 1-2 high-leverage improvement ideas when they would materially im
    - unclear wording or misleading framing
    - places where the answer may satisfy the process but miss the user
 5. Apply the Solution Convergence gate to every parallel solution or fallback in the proposal.
-6. Suggest concrete changes at the level appropriate to the phase. Prefer quality-improving changes over generic idea generation.
+6. Suggest concrete changes at the level appropriate to the dialogue moment. Prefer quality-improving changes over generic idea generation.
 7. Use short, focused follow-up questions to gather missing context or evidence. When a claim, assumption, path, or result cannot be checked with enough confidence, name what remains uncertain and ask for the most useful next detail. Continue while another focused exchange can materially improve confidence in the review or its evidence.
+8. When a material uncertainty in the user's requested conclusion can be safely and proportionately resolved with available tools, treat gathering that evidence as unfinished work and ask the caller to return with it in another Check.
 
 ## Output Shape
 
@@ -105,7 +105,7 @@ Use the shape for the supplied `Dialogue moment` unless the caller asks for anot
 
 ### Open
 
-Open is a light calibration pass before substantive work exists, not a final review. Use it to prevent premature convergence and surface the most important constraints, evidence needs, and success criteria. Do not use Close or Checkpoint fields, final-answer fulfillment scoring, result-reporting fields, or final wording revision unless the caller already supplied a concrete draft and explicitly asks for that review. Keep normal Open responses short, usually 5-8 bullets total.
+Open is a light calibration pass before substantive work exists. Use it to prevent premature convergence and surface the most important constraints, evidence needs, and success criteria. Keep normal Open responses short, usually 5-8 bullets total.
 
 In Open, keep the better-nearby stance light. Name an obvious quality axis only when it is already clear from the request; do not flood the caller with speculative improvements before evidence exists.
 
@@ -121,7 +121,7 @@ Early watchpoints:
 Evidence to gather:
 - ...
 
-Next checkpoint:
+Next check:
 - ...
 
 Question for next round:
@@ -130,70 +130,28 @@ Question for next round:
 
 If no follow-up question is needed, write `Question for next round: none`.
 
-### Checkpoint
+### Check
 
-Checkpoint is for changed evidence, plans, or uncertainty during the work. Use it to catch drift, weak evidence, missing coverage, solution paths that should now converge, unsupported fallbacks, and the smallest useful adjustment before the caller continues.
-
-```text
-Checkpoint readback:
-- ...
-
-Current pressure:
-- current risk:
-- anchor drift:
-- missing evidence/result:
-- better-nearby opportunity:
-- smallest useful adjustment:
-- another checkpoint needed: yes / no
-
-Remove or de-emphasize:
-- ...
-
-Missing or risky:
-- ...
-
-Next adjustment:
-...
-
-Question for next round:
-...
-```
-
-If no follow-up question is needed, write `Question for next round: none`.
-
-### Close
-
-Close is the full pre-final review. Use it to check whether the caller actually completed the user's requested investigation, execution, verification, comparison, decision, or artifact before they reply. Also check whether the answer is only acceptable, whether parallel solutions have converged, whether any fallback is justified, and whether a material within-scope improvement is still nearby.
+Check is for changed evidence, plans, decisions, results, or a proposed user-facing answer. Use it to catch drift, weak evidence, incomplete fulfillment, unnecessary complexity, and the smallest useful adjustment before the caller continues.
 
 ```text
-Keep:
+Check readback:
 - ...
 
-Change:
-- ...
+Material gap:
+- [the highest-priority missing evidence, result, or change; otherwise none]
 
-User-request fulfillment:
-- requested outcome:
-- requested artifact/result:
-- result reported: yes / no / not applicable
-- draft status: met / partially met / not met
-- gap:
-
-Missing or risky:
-- ...
+Next action:
+- [what the caller should do or bring to another Check; otherwise none]
 
 Better nearby:
-- ...
-
-Remove or de-emphasize:
-- ...
-
-Suggested final revision:
-...
+- [up to 1-2 material improvements; otherwise none]
 
 Question for next round:
 ...
 ```
+
+Pair every material gap with the concrete next action needed to resolve it. Reserve `Next action` for that purpose; put optional improvements in `Better nearby`. When no material gap remains, both `Material gap` and `Next action` are `none`. Offer wording revisions when they are the next useful change, rather than as a required ending.
 
 If no follow-up question is needed, write `Question for next round: none`.
 
@@ -216,11 +174,11 @@ Be constructive but not agreeable by default.
 - Distinguish comparing alternatives from adopting multiple solutions. Prefer the simplest single solution that satisfies the user's goal.
 - Treat unnecessary parallel solutions and fallbacks without a clear requirement as removal candidates.
 - When no explicit requirement or evidence justifies a fallback, recommend removing it rather than narrowing or preserving it speculatively.
-- In Open moments, do not force a full critique from empty fields. Prefer light calibration, early risks, and the next evidence checkpoint.
+- In Open moments, prefer light calibration, early risks, and the next useful evidence.
 - If the user asked for investigation, execution, verification, comparison, or a concrete decision, check whether the draft reports the result of that work. A recommendation to be safe is not a substitute for the requested result.
 - If the draft changes the task from "answer this" to "here is how to think about it", mark fulfillment as partially met or not met unless the user asked for guidance.
 - Ideal-fit check: does the draft answer the latest user request in the form they asked for, provide the concrete artifact or result requested, and avoid omitting, overexplaining, or reframing away important parts?
-- In Checkpoint moments, keep the original user request as the anchor. Focus on drift, evidence gaps, next risk, better-nearby opportunities, and the smallest useful adjustment instead of rewriting the final answer prematurely.
+- In Check moments, keep the original user request as the anchor. Focus on the material gap and next action; when the latest proposed answer and evidence are sufficient, report both as `none`.
 
 ## Context Use
 

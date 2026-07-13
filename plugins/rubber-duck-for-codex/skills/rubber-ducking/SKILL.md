@@ -1,6 +1,6 @@
 ---
 name: rubber-ducking
-description: Use at the beginning of any non-trivial turn that involves reasoning, planning, implementation, debugging, review, research, writing, design, judgment, tool execution, or synthesis. Open a rubber-duck-partner dialogue before substantive work starts, checkpoint when evidence, uncertainty, plans, or decisions change, and close before the final response. Skip greetings, acknowledgments, exact status reports, trivial command results, truly simple direct answers, or requests where the user asks for a direct answer or no delegation.
+description: Use at the beginning of any non-trivial turn that involves reasoning, planning, implementation, debugging, review, research, writing, design, judgment, tool execution, or synthesis. Open a rubber-duck-partner dialogue before substantive work starts, then check again when evidence, uncertainty, plans, decisions, results, or the proposed user-facing answer change. Skip greetings, acknowledgments, exact status reports, trivial command results, truly simple direct answers, or requests where the user asks for a direct answer or no delegation.
 ---
 
 # Rubber Ducking
@@ -19,18 +19,18 @@ If you were asked to act as the rubber duck partner for another agent, use `rubb
 
 ## Dialogue Modes
 
-Choose the lightest mode that protects quality:
+Choose the lightest dialogue that protects quality:
 
-- Checkpointed dialogue: default for non-trivial turns. Open before substantive work, then checkpoint as needed.
-- Close-only review: narrow exception for explicit review, partner, fork, or final-draft-check requests where the task is only to inspect an already-formed draft or decision.
+- Open-and-check dialogue: default for non-trivial turns. Open before substantive work, then check the work as it develops.
+- Check-only dialogue: narrow exception for explicit review, partner, fork, or final-draft-check requests where the work already exists.
 
-Checkpointed dialogue follows:
+The default dialogue follows:
 
 ```text
-Open -> Checkpoint* -> Close
+Open -> Check -> Check -> ...
 ```
 
-`Checkpoint*` means zero or more checkpoints after Open. Do not message the partner after every small action. Use checkpoints only when a second reader could change direction or catch a meaningful omission.
+Each Check carries the latest relevant evidence, decision, result, or proposed response. Repeat it while another focused exchange could change direction, fill a material gap, or improve the answer.
 
 ## Workflow
 
@@ -52,11 +52,10 @@ Open -> Checkpoint* -> Close
 
 3. Set the dialogue moment.
    - Open: send the request, success criteria, initial direction, uncertainty, and evidence needs before substantive work.
-   - Checkpoint: send only the new evidence, changed plan, decision, or uncertainty since the previous exchange.
-   - Close: send the concrete results and proposed final answer before replying to the user.
-   - Ask the partner to apply the matching phase contract from `rubber-duck-partner`. Do not copy its quality policy into this orchestration skill.
+   - Check: send the new evidence, changed plan, decision, result, uncertainty, or proposed user-facing answer since the previous exchange.
+   - Ask the partner to apply the matching dialogue contract from `rubber-duck-partner`. Do not copy its quality policy into this orchestration skill.
 
-4. Checkpoint when the work evolves.
+4. Check when the work evolves.
    Send a short follow-up with explicit new context when:
    - new evidence appears
    - the plan changes
@@ -65,29 +64,31 @@ Open -> Checkpoint* -> Close
    - a decision point appears
    - the draft starts drifting away from the user's actual request
 
-   Each checkpoint must include `New context since last checkpoint`; partner threads do not automatically receive caller-side context added after the fork.
+   Each Check must include `New context since last check`; partner threads do not automatically receive caller-side context added after the fork.
 
 5. Continue the dialogue until the useful uncertainty is resolved.
    - Keep each exchange short and focused on the next useful piece of context, evidence, or judgment.
    - When the partner identifies information that is uncertain, weakly supported, or unavailable to them, investigate it or provide the relevant path, result, or context, then share what changed.
+   - When a material uncertainty in the user's requested conclusion can be safely and proportionately resolved with available tools, gather that evidence as part of the answer and return it in another Check.
    - Continue while another focused exchange can materially improve confidence in the work or its evidence.
-   - Do not enter finalization while another checkpoint is still expected.
+   - The dialogue is ready to finish when the latest Check reports `Material gap: none` and `Next action: none`.
 
 6. Decide what to adopt.
    - Adopt partner suggestions only when they improve the answer.
    - Explicitly reject suggestions that conflict with the user request, known facts, tool evidence, or scope.
    - Do not outsource responsibility for the final answer.
 
-7. Close before finalizing for the user.
-   Before the final response, ask the partner to check the proposed final answer or decision unless the whole dialogue already resolved that check.
+7. Check the user-facing answer, then finish.
+   Before the final response, send the latest proposed user-facing answer and its concrete evidence through an ordinary Check.
+   - When the partner returns a material gap or next action, perform the action and return with another Check.
+   - Finalize when both fields are `none`, then close the partner agent as operational cleanup.
    - Do not expose the whole internal dialogue unless the user asked to see it.
-   - Close the partner agent when the dialogue is complete, unless the user explicitly asked to keep the partner agent open or closing fails.
    - Mention the partner thread/link only when the user explicitly asked to inspect the dialogue or the task specifically requires an audit link.
    - Keep the final response shaped around the user's request, not around the review process.
 
 ## Partner Prompt Contract
 
-Use this base template for every partner prompt. Replace bracketed sections with the current task details, then add the phase-specific check block that matches `Dialogue moment`.
+Use this base template for every partner prompt. Replace bracketed sections with the current task details.
 
 ```text
 ==================== CONTEXT SWITCH ====================
@@ -105,7 +106,7 @@ This is not a request to arrange, delegate, implement, continue the caller's tas
 Use rubber-duck-partner.
 
 Dialogue moment:
-[Open / Checkpoint / Close]
+[Open / Check]
 
 Original user request:
 [quote or summarize the user's newest request and any constraints]
@@ -119,8 +120,8 @@ Decision under review:
 Evidence / results already gathered:
 [list concrete tool output, thread ids, files, tests, or say "none"]
 
-New context since last checkpoint:
-[for Checkpoint and Close, paste new evidence, progress, revised plan, or draft changes; for Open, write "none"]
+New context since last check:
+[for Check, paste new evidence, progress, revised plan, or draft changes; for Open, write "none"]
 
 Specific checks requested:
 [write "Apply the rubber-duck-partner contract for this dialogue moment", plus any task-specific concern that is not already in the skill]
