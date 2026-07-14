@@ -93,7 +93,7 @@ Each Check carries the latest relevant evidence, decision, result, or proposed r
 
 ## Partner Prompt Contract
 
-Use this base template for every partner prompt. Replace bracketed sections with the current task details.
+Use the full template below for the first request and ordinary work-state Checks, including the final user-facing-answer Check. Replace bracketed sections with the current task details.
 
 ```text
 ==================== CONTEXT SWITCH ====================
@@ -130,6 +130,20 @@ New context since last check:
 
 Specific checks requested:
 [write "Apply the rubber-duck-partner contract for this dialogue moment", plus any task-specific concern that is not already in the skill]
+```
+
+For a direct answer or question about the partner's immediately preceding response, omit unchanged fields and send only:
+
+```text
+Dialogue moment:
+Check
+
+New context since last check:
+[one direct answer or question, plus any new evidence or context]
+
+Specific checks requested:
+Reply directly and briefly to this point.
+Revise your previous view if warranted.
 ```
 
 Avoid shorthand such as "parent thread" unless the prompt defines it. Prefer "caller", "forked conversation", "inherited history", and "this new request" so the partner does not confuse their role with running another subagent.
