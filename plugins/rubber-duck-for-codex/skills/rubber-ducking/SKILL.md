@@ -34,8 +34,12 @@ Each Check carries the latest relevant evidence, decision, result, or proposed r
 
 ## Workflow
 
-1. Open early.
-   Start a partner dialogue before substantive work on a non-trivial turn. Build a compact working brief:
+1. Prepare the first dialogue request.
+   Use the mode selected in "Dialogue Modes" to set the initial dialogue moment:
+   - Open: send the request, success criteria, initial direction, uncertainty, and evidence needs before substantive work.
+   - Check: send the existing or changed work, evidence, decision, result, uncertainty, or proposed response.
+
+   Build a compact working brief:
    - user's request and relevant constraints
    - current context needed to judge the answer
    - intended outcome and success criteria
@@ -43,19 +47,20 @@ Each Check carries the latest relevant evidence, decision, result, or proposed r
    - known risks, uncertainties, or evidence gaps
    - what changed or remains uncertain
 
-2. Start a fresh partner dialogue.
+   Fill the full template from "Partner Prompt Contract" below:
    - Ask the partner to use `rubber-duck-partner`.
-   - Use the full template from "Partner Prompt Contract" below.
    - Put a clear separator before the partner task so the forked agent can tell the context has changed.
    - Keep the prompt self-contained. Do not rely on forked context for the draft, evidence, current-turn commentary, or decision point; include those explicitly in the prompt under the required labels.
    - Tell the partner not to start another delegation loop; their next response is the deliverable.
-
-3. Set the dialogue moment.
-   - Open: send the request, success criteria, initial direction, uncertainty, and evidence needs before substantive work.
-   - Check: send the new evidence, changed plan, decision, result, uncertainty, or proposed user-facing answer since the previous exchange.
    - Ask the partner to apply the matching dialogue contract from `rubber-duck-partner`. Do not copy its quality policy into this orchestration skill.
 
-4. Check when the work evolves.
+2. Start a fresh partner dialogue.
+   Launch `rubber-duck-partner` as an internal subagent with the prepared dialogue request.
+   - If direct internal spawning is unavailable, or the launch explicitly reports that nested delegation is unavailable because of the current depth limit, skip rubber-ducking for the rest of the turn. Continue the assigned task without later dialogue, Check, or cleanup attempts.
+   - Handle and report other launch failures as ordinary tool errors rather than treating them as a depth-related skip.
+   - Internal subagent spawning is the only partner launch path. Do not probe for or substitute App tasks, thread forks, App Server calls, or shell commands.
+
+3. Continue with Checks as the work evolves.
    Send a short follow-up with explicit new context when:
    - new evidence appears
    - the plan changes
@@ -66,19 +71,19 @@ Each Check carries the latest relevant evidence, decision, result, or proposed r
 
    Each Check must include `New context since last check`; partner threads do not automatically receive caller-side context added after the fork.
 
-5. Continue the dialogue until the useful uncertainty is resolved.
+4. Continue the dialogue until the useful uncertainty is resolved.
    - Keep each exchange short and focused on the next useful piece of context, evidence, or judgment.
    - When the partner identifies information that is uncertain, weakly supported, or unavailable to them, investigate it or provide the relevant path, result, or context, then share what changed.
    - When a material uncertainty in the user's requested conclusion can be safely and proportionately resolved with available tools, gather that evidence as part of the answer and return it in another Check.
    - Continue while another focused exchange can materially improve confidence in the work or its evidence.
    - The dialogue is ready to finish when the latest Check reports `Material gap: none` and `Next action: none`.
 
-6. Decide what to adopt.
+5. Decide what to adopt.
    - Adopt partner suggestions only when they improve the answer.
    - Explicitly reject suggestions that conflict with the user request, known facts, tool evidence, or scope.
    - Do not outsource responsibility for the final answer.
 
-7. Check the user-facing answer, then finish.
+6. Check the user-facing answer, then finish.
    Before the final response, send the latest proposed user-facing answer and its concrete evidence through an ordinary Check.
    - When the partner returns a material gap or next action, perform the action and return with another Check.
    - Finalize when both fields are `none`, then close the partner agent as operational cleanup.
