@@ -50,3 +50,19 @@ test("Codex and Claude marketplaces publish the root plugin", () => {
     repo: "game-dev-rta-club/agent-skills",
   });
 });
+
+test("plugin metadata presents a skill collection rather than one workflow", () => {
+  const codexPlugin = readJson(".codex-plugin/plugin.json");
+  const claudePlugin = readJson(".claude-plugin/plugin.json");
+  const claudeMarketplace = readJson(".claude-plugin/marketplace.json");
+  const publicMetadata = JSON.stringify({
+    codexDescription: codexPlugin.description,
+    codexInterface: codexPlugin.interface,
+    claudeDescription: claudePlugin.description,
+    marketplaceDescription: claudeMarketplace.metadata.description,
+    pluginListingDescription: claudeMarketplace.plugins[0].description,
+  });
+
+  assert.match(publicMetadata, /Agent Skills/);
+  assert.doesNotMatch(publicMetadata, /rubber-duck|independent review/i);
+});
