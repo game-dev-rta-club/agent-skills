@@ -1,5 +1,8 @@
 {
   "name": "game-dev-rta-club",
+  "metadata": {
+    "description": "Small, reusable Agent Skills maintained by Game Dev RTA Club."
+  },
   "owner": {
     "name": "Game Dev RTA Club"
   },
@@ -10,7 +13,7 @@
         "source": "github",
         "repo": "game-dev-rta-club/agent-skills"
       },
-      "description": "Independent review workflows for coding agents."
+      "description": "Small, reusable Agent Skills for Codex and Claude Code."
     }
   ]
 }

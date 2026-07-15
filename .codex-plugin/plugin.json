@@ -1,7 +1,7 @@
 {
   "name": "agent-skills",
   "version": "1.0.0",
-  "description": "Stable, reusable agent skills maintained by Game Dev RTA Club.",
+  "description": "Small, reusable Agent Skills maintained by Game Dev RTA Club.",
   "author": {
     "name": "Game Dev RTA Club",
     "url": "https://github.com/game-dev-rta-club"
@@ -12,13 +12,13 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Game Dev RTA Agent Skills",
-    "shortDescription": "Stable workflows for AI coding agents.",
-    "longDescription": "Reusable agent skills maintained as small, independently understandable workflows.",
+    "shortDescription": "Focused workflows for AI coding agents.",
+    "longDescription": "A collection of independently understandable Agent Skills for focused coding-agent workflows.",
     "developerName": "Game Dev RTA Club",
     "category": "Productivity",
     "capabilities": [
       "skills"
     ],
-    "defaultPrompt": "Use rubber-duck-caller to pressure-test this turn."
+    "defaultPrompt": "Use the most relevant installed Agent Skill for this task."
   }
 }
