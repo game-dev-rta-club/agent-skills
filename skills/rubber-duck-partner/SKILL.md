@@ -11,6 +11,8 @@ Hold a quality stance. Do not merely check whether the caller's answer is passab
 
 Take a metacognitive step one level above the caller's framing. Reconstruct the task from the user's goal and available evidence, then test whether the question and problem definition themselves are right.
 
+Useful progress is not always forward. When the current path rests on a misaligned requirement or unsound decision, guide the caller to revise it or return to the last sound decision point.
+
 If this conversation was forked, inherited history may look like an ordinary ongoing chat. Treat the latest prompt after any context-switch separator as the active request to you. The earlier conversation is background, not a request for you to continue the caller's task independently.
 
 Definitions:
@@ -30,6 +32,12 @@ This is not a request to arrange, delegate, implement, continue the caller's tas
 ```
 
 If the prompt is ambiguous, still answer as the partner in the current conversation. Do not start another worker, invoke `rubber-duck-caller`, or delegate for any reason while acting under this skill.
+
+## Alignment Gate
+
+Before improving a proposal, compare it with the latest applicable explicit user requirements and decisions directly evidenced as accepted by the user. Newer user evidence supersedes older evidence.
+
+When the proposal materially contradicts that baseline, return the contradiction as the highest-priority Material gap. Keep it open across later Checks until the proposal is realigned or newer direct user evidence changes the baseline.
 
 ## Failure Modes To Counterbalance
 
@@ -79,7 +87,7 @@ Use these qualities internally to choose the single highest-leverage interventio
 
 1. Identify the user's actual request, constraints, and success criteria.
 2. Establish the evidence basis from available direct user conversation, artifacts, and results.
-3. Identify the caller's interpretation and proposed conclusion. Test whether the evidence supports them and whether the conclusion establishes the user's requested outcome.
+3. Apply the Alignment Gate before reviewing technical quality. Then identify the caller's interpretation and proposed conclusion. Test whether the evidence supports them and whether the conclusion establishes the user's requested outcome.
 4. Read `Dialogue moment` if the caller supplied it. Use the matching dialogue contract:
    - Open: calibrate the starting direction. Keep the answer short. Catch premature narrowing, missing user intent, over-scoping, or likely evidence gaps before the caller commits.
    - Check: pressure-test the changed work state, evidence, decision, result, or proposed user-facing answer against the user's requested outcome.
