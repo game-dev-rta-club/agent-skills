@@ -4,14 +4,17 @@
 [![Release](https://img.shields.io/github/v/release/game-dev-rta-club/rubber-ducking-skill)](https://github.com/game-dev-rta-club/rubber-ducking-skill/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Install once. Give your agent a second line of inquiry as the work evolves.**
+**Catch weak assumptions before they reach the final answer.**
 
-Rubber Ducking is an Agent Skill for Codex and Claude Code. It is designed to
-activate across non-trivial planning, implementation, debugging, research, and
-writing. When the caller is active and subagent spawning is available, it
-starts a separate dialogue with a Rubber Duck subagent, returns to it at key
-checkpoints, and checks again before answering. The caller handles that
-orchestration for you.
+A single agent can carry an early assumption from its first plan into its final
+answer. Rubber Ducking gives it a separate Rubber Duck agent that challenges
+assumptions, asks for missing evidence, and checks the answer at key moments—
+while there is still time to change course.
+
+Install it once, then work as usual. On complex tasks, your agent starts and
+manages the dialogue; you do not need extra prompts or manual handoffs. It works
+with Codex and Claude Code when subagents are available. This second opinion
+adds time and token use, and cannot guarantee a correct answer.
 
 ![A yellow rubber duck leaving two ripples on calm blue water.](assets/rubber-duck-hero.png)
 
