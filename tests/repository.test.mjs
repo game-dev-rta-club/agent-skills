@@ -71,7 +71,7 @@ test("Codex and Claude marketplaces publish the root plugin", () => {
   assert.equal(codexMarketplace.plugins[0].name, codexPlugin.name);
   assert.deepEqual(codexMarketplace.plugins[0].source, {
     source: "url",
-    url: "https://github.com/game-dev-rta-club/agent-skills.git",
+    url: "https://github.com/game-dev-rta-club/rubber-ducking-skill.git",
   });
 
   assert.equal(claudeMarketplace.name, "game-dev-rta-club");
@@ -79,11 +79,11 @@ test("Codex and Claude marketplaces publish the root plugin", () => {
   assert.equal(claudeMarketplace.plugins[0].name, claudePlugin.name);
   assert.deepEqual(claudeMarketplace.plugins[0].source, {
     source: "github",
-    repo: "game-dev-rta-club/agent-skills",
+    repo: "game-dev-rta-club/rubber-ducking-skill",
   });
 });
 
-test("plugin metadata presents a skill collection rather than one workflow", () => {
+test("plugin metadata presents one rubber-ducking product", () => {
   const codexPlugin = readJson(".codex-plugin/plugin.json");
   const claudePlugin = readJson(".claude-plugin/plugin.json");
   const claudeMarketplace = readJson(".claude-plugin/marketplace.json");
@@ -95,8 +95,29 @@ test("plugin metadata presents a skill collection rather than one workflow", () 
     pluginListingDescription: claudeMarketplace.plugins[0].description,
   });
 
-  assert.match(publicMetadata, /Agent Skills/);
-  assert.doesNotMatch(publicMetadata, /rubber-duck|independent review/i);
+  assert.equal(codexPlugin.name, "rubber-ducking-skill");
+  assert.equal(claudePlugin.name, "rubber-ducking-skill");
+  assert.match(publicMetadata, /rubber-duck|independent second-pass review/i);
+  assert.doesNotMatch(publicMetadata, /skill collection|skill library/i);
+});
+
+test("tracked project text does not reference retired repositories", () => {
+  const projectText = listTrackedTextFiles()
+    .map(({ content }) => content)
+    .join("\n");
+
+  assert.doesNotMatch(projectText, /game-dev-rta-club\/agent-skills/);
+  assert.doesNotMatch(projectText, /nikollson\/(?:agent-skills|codex-skills)-experiment/);
+});
+
+test("community conduct reports use the shared contact", () => {
+  const codeOfConduct = readFileSync(
+    new URL("CODE_OF_CONDUCT.md", repositoryRoot),
+    "utf8",
+  );
+
+  assert.match(codeOfConduct, /^# Contributor Covenant 3\.0 Code of Conduct$/m);
+  assert.match(codeOfConduct, /game-dev-rta-club@googlegroups\.com/);
 });
 
 test("project text uses English scripts", () => {
@@ -111,11 +132,11 @@ test("English-only check recognizes Japanese text ranges", () => {
   for (const value of ["\u3042", "\u30a2", "\u6f22", "\u3001", "\uff21"]) {
     assert.match(value, japaneseTextPattern);
   }
-  assert.doesNotMatch("Agent Skills", japaneseTextPattern);
+  assert.doesNotMatch("Rubber Ducking Skill", japaneseTextPattern);
 });
 
 test("English-only check reads symlink targets without following them", () => {
-  const directory = mkdtempSync(join(tmpdir(), "agent-skills-english-test-"));
+  const directory = mkdtempSync(join(tmpdir(), "rubber-ducking-skill-english-test-"));
   const link = join(directory, "linked-skill");
   try {
     symlinkSync("\u3042", link);

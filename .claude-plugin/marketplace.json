@@ -1,19 +1,19 @@
 {
   "name": "game-dev-rta-club",
   "metadata": {
-    "description": "Small, reusable Agent Skills maintained by Game Dev RTA Club."
+    "description": "Independent second-pass review for AI coding agents."
   },
   "owner": {
     "name": "Game Dev RTA Club"
   },
   "plugins": [
     {
-      "name": "agent-skills",
+      "name": "rubber-ducking-skill",
       "source": {
         "source": "github",
-        "repo": "game-dev-rta-club/agent-skills"
+        "repo": "game-dev-rta-club/rubber-ducking-skill"
       },
-      "description": "Small, reusable Agent Skills for Codex and Claude Code."
+      "description": "A caller and partner pair for focused independent review."
     }
   ]
 }

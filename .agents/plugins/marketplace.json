@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "agent-skills",
+      "name": "rubber-ducking-skill",
       "source": {
         "source": "url",
-        "url": "https://github.com/game-dev-rta-club/agent-skills.git"
+        "url": "https://github.com/game-dev-rta-club/rubber-ducking-skill.git"
       },
       "policy": {
         "installation": "AVAILABLE",
