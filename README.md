@@ -18,13 +18,6 @@ adds time and token use, and cannot guarantee a correct answer.
 
 ![A yellow rubber duck leaving two ripples on calm blue water.](assets/rubber-duck-hero.png)
 
-> **[Rubber ducking](https://cs50.harvard.edu/x/notes/2/#debugging)**,
-> also called rubber duck debugging, is a programming technique: explain code
-> or a problem step by step to an inanimate listener—traditionally a rubber
-> duck—to make gaps in your reasoning easier to notice. This skill turns that
-> familiar practice into an active agent dialogue, where the Rubber Duck
-> questions the work instead of only listening.
-
 > ### Example conversation
 >
 > - **You:** Find why CI is flaky, fix it, and verify the result.
@@ -55,6 +48,13 @@ Rubber Ducking counterbalances that continuity with a separate role. At key
 moments, one focused question or correction from the Rubber Duck helps the
 working agent narrow the work, test the direction, and choose the next
 step—without handing over ownership.
+
+> **[Rubber ducking](https://cs50.harvard.edu/x/notes/2/#debugging)**,
+> also called rubber duck debugging, is a programming technique: explain code
+> or a problem step by step to an inanimate listener—traditionally a rubber
+> duck—to make gaps in your reasoning easier to notice. This skill turns that
+> familiar practice into an active agent dialogue, where the Rubber Duck
+> questions the work instead of only listening.
 
 ## Quick start
 
