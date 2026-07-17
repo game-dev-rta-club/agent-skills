@@ -3,24 +3,26 @@
 Contributions that make the skills clearer, safer, or easier to reuse are
 welcome.
 
+All participants must follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
 If you have found a security vulnerability, do not open a public issue. Follow
 the private reporting process in [SECURITY.md](SECURITY.md).
 
 ## Propose a change
 
 - For a typo, documentation fix, or small bug fix, open a pull request directly.
-- For a new skill or a behavior change, open an issue first so the scope can be
-  discussed before implementation.
-- Keep each skill independently understandable. Related skills may share a name
-  prefix, but every skill directory remains directly under `skills/`.
+- For a behavior change or a new internal component, open an issue first so the
+  scope can be discussed before implementation.
+- Propose unrelated public skills in their own repositories rather than adding
+  them to this package.
 
 ## Local development
 
 Requirements: Node.js 20 or later.
 
 ```sh
-git clone https://github.com/game-dev-rta-club/agent-skills.git
-cd agent-skills
+git clone https://github.com/game-dev-rta-club/rubber-ducking-skill.git
+cd rubber-ducking-skill
 npm ci
 npm test
 ```

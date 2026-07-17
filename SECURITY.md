@@ -15,7 +15,7 @@ deadline, do not rely on this project for that guarantee.
 Do not open a public GitHub issue or post vulnerability details to the project
 Google Group.
 
-Use [GitHub private vulnerability reporting](https://github.com/game-dev-rta-club/agent-skills/security/advisories/new).
+Use [GitHub private vulnerability reporting](https://github.com/game-dev-rta-club/rubber-ducking-skill/security/advisories/new).
 Include:
 
 - The affected skill, manifest, or version.

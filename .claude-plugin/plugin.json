@@ -1,11 +1,12 @@
 {
-  "name": "agent-skills",
-  "description": "Small, reusable Agent Skills maintained by Game Dev RTA Club.",
+  "name": "rubber-ducking-skill",
+  "version": "2.0.0",
+  "description": "Independent second-pass review for AI coding agents.",
   "author": {
     "name": "Game Dev RTA Club"
   },
-  "homepage": "https://github.com/game-dev-rta-club/agent-skills",
-  "repository": "https://github.com/game-dev-rta-club/agent-skills",
+  "homepage": "https://github.com/game-dev-rta-club/rubber-ducking-skill",
+  "repository": "https://github.com/game-dev-rta-club/rubber-ducking-skill",
   "license": "MIT",
   "skills": "./skills"
 }

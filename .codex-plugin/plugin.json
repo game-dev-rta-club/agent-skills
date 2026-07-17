@@ -1,24 +1,24 @@
 {
-  "name": "agent-skills",
-  "version": "1.0.0",
-  "description": "Small, reusable Agent Skills maintained by Game Dev RTA Club.",
+  "name": "rubber-ducking-skill",
+  "version": "2.0.0",
+  "description": "Independent second-pass review for AI coding agents.",
   "author": {
     "name": "Game Dev RTA Club",
     "url": "https://github.com/game-dev-rta-club"
   },
-  "homepage": "https://github.com/game-dev-rta-club/agent-skills",
-  "repository": "https://github.com/game-dev-rta-club/agent-skills",
+  "homepage": "https://github.com/game-dev-rta-club/rubber-ducking-skill",
+  "repository": "https://github.com/game-dev-rta-club/rubber-ducking-skill",
   "license": "MIT",
   "skills": "./skills/",
   "interface": {
-    "displayName": "Game Dev RTA Agent Skills",
-    "shortDescription": "Focused workflows for AI coding agents.",
-    "longDescription": "A collection of independently understandable Agent Skills for focused coding-agent workflows.",
+    "displayName": "Rubber Ducking Skill",
+    "shortDescription": "Independent second-pass review for agent work.",
+    "longDescription": "A caller and partner pair that pressure-tests plans, decisions, implementations, and final drafts.",
     "developerName": "Game Dev RTA Club",
     "category": "Productivity",
     "capabilities": [
       "skills"
     ],
-    "defaultPrompt": "Use the most relevant installed Agent Skill for this task."
+    "defaultPrompt": "Use rubber-duck-caller to pressure-test this task before finalizing it."
   }
 }
