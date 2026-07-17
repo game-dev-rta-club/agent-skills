@@ -38,23 +38,19 @@ adds time and token use, and cannot guarantee a correct answer.
 The Rubber Duck is another subagent, not a human reviewer. The caller returns
 to the same dialogue as the current task changes.
 
-## Why it is different
+## One task, two roles
 
-When one agent plans, acts, and answers along a single reasoning trajectory,
-early assumptions and blind spots can reinforce themselves instead of being
-re-examined. Rubber Ducking inserts a focused Rubber Duck subagent into that
-trajectory while the task is still in progress.
+One agent owns the task. A separate Rubber Duck questions the work without
+taking it over.
 
-- **Checklist review:** A checklist says what to inspect; the caller also
-  manages when to bring the Rubber Duck back into the task.
-- **Ordinary rubber duck:** A passive duck listens; the Rubber Duck subagent
-  returns a focused question or correction.
-- **One-shot subagent review:** A one-shot review inspects one snapshot; Rubber
-  Ducking revisits the same Rubber Duck dialogue at material checkpoints.
+The context that keeps the working agent coherent can also carry weak
+assumptions forward. Returning to the same Rubber Duck dialogue when evidence
+changes or a decision needs to be made creates counterpressure while the path
+can still change.
 
-Use it across migration plans, uncertain bug fixes, implementation decisions,
-research conclusions, and user-facing drafts. The caller skips greetings,
-simple answers, and other work where another dialogue would add little value.
+The value comes from role separation and timing, not guaranteed independence or
+correctness. It applies across non-trivial planning, implementation, debugging,
+research, and writing; simple requests are skipped.
 
 ## Quick start
 
