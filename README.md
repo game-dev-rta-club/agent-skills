@@ -9,48 +9,45 @@
 Rubber Ducking is an Agent Skill for Codex and Claude Code. It is designed to
 activate across non-trivial planning, implementation, debugging, research, and
 writing. When the caller is active and subagent spawning is available, it
-starts a separate partner dialogue, returns to it at key checkpoints, and
-checks again before answering. The caller handles that orchestration for you.
+starts a separate dialogue with a Rubber Duck subagent, returns to it at key
+checkpoints, and checks again before answering. The caller handles that
+orchestration for you.
 
-**Illustrative example**
+![A yellow rubber duck leaving two ripples on calm blue water.](assets/rubber-duck-hero.png)
 
-**You:** Find why CI is flaky, fix it, and verify the result.
+> ### Example conversation
+>
+> - **You:** Find why CI is flaky, fix it, and verify the result.
+>   - **Agent — before work:** I will start by treating this as a test bug.
+>     - **Rubber Duck:** What evidence separates a test failure from a runner
+>       failure?
+>   - **Agent — new evidence:** Successful runs use an earlier runner image. I
+>     will test that difference first.
+>     - **Rubber Duck:** Timing alone does not isolate the runner image. Run the
+>       same revision repeatedly on both images.
+>   - **Agent — after comparison:** I ran the same revision repeatedly on both
+>     images. Failures reproduced on the new image but not the previous one. I
+>     pinned the previous image and reran the affected jobs; they passed.
+>     - **Rubber Duck — before answer:** Material gap: none. Next action: none.
+>   - **Agent — answer to You:** The new runner image caused the flakes. I
+>     pinned the previous image and verified the affected jobs pass.
 
-**Before work**
-
-- **Agent:** I will start by treating this as a test bug.
-- **Partner:** What evidence separates a test failure from a runner failure?
-- **Agent:** Successful runs use an earlier runner image. I will test that
-  difference first.
-
-**Evidence changed**
-
-- **Partner:** Material gap: Timing alone does not isolate the runner image.
-  Next action: Run the same revision repeatedly on both images.
-- **Agent:** I ran the same revision repeatedly on both images. In those runs,
-  failures reproduced on the new image but not the previous one. I pinned the
-  previous image in the runner configuration and reran the affected jobs; they
-  passed.
-
-**Before answer**
-
-- **Partner:** Material gap: none. Next action: none.
-
-One request; the caller returns to the same partner dialogue as the work changes.
+The Rubber Duck is another subagent, not a human reviewer. The caller returns
+to the same dialogue as the current task changes.
 
 ## Why it is different
 
 When one agent plans, acts, and answers along a single reasoning trajectory,
 early assumptions and blind spots can reinforce themselves instead of being
-re-examined. Rubber Ducking inserts a focused thinking partner into that
+re-examined. Rubber Ducking inserts a focused Rubber Duck subagent into that
 trajectory while the task is still in progress.
 
 - **Checklist review:** A checklist says what to inspect; the caller also
-  manages when to bring the partner back into the task.
-- **Ordinary rubber duck:** A passive duck listens; the partner returns a
-  focused question or correction.
+  manages when to bring the Rubber Duck back into the task.
+- **Ordinary rubber duck:** A passive duck listens; the Rubber Duck subagent
+  returns a focused question or correction.
 - **One-shot subagent review:** A one-shot review inspects one snapshot; Rubber
-  Ducking revisits the same dialogue at material checkpoints.
+  Ducking revisits the same Rubber Duck dialogue at material checkpoints.
 
 Use it across migration plans, uncertain bug fixes, implementation decisions,
 research conclusions, and user-facing drafts. The caller skips greetings,
@@ -82,17 +79,17 @@ Use rubber-duck-caller to investigate why this test is flaky, fix it, and verify
 ## How it works
 
 1. [`rubber-duck-caller`](skills/rubber-duck-caller/SKILL.md) opens a fresh
-   partner conversation before substantive work and transfers a self-contained
-   working brief.
-2. [`rubber-duck-partner`](skills/rubber-duck-partner/SKILL.md) challenges the
-   direction with the highest-leverage question or correction without taking
-   over the task.
+   Rubber Duck conversation before substantive work and transfers a
+   self-contained working brief.
+2. [`rubber-duck-partner`](skills/rubber-duck-partner/SKILL.md) acts as the
+   Rubber Duck subagent. It challenges the direction with the highest-leverage
+   question or correction without taking over the task.
 3. The caller revisits the same dialogue when evidence, decisions, results, or
    the proposed answer change. It checks once more before replying.
 4. Each check reports at most one material gap and one next action. The
    dialogue ends when neither remains.
 
-The partner concentrates on four questions:
+The Rubber Duck concentrates on four questions:
 
 - **Alignment:** Does the work still match the user's latest requirements?
 - **Evidence:** Do direct conversation, artifacts, and results support the
@@ -102,7 +99,7 @@ The partner concentrates on four questions:
   sent?
 
 The caller remains responsible for the work and decides what to adopt. The
-partner does not implement the task or make decisions for the user.
+Rubber Duck does not implement the task or make decisions for the user.
 
 ## Trust and limits
 
@@ -111,8 +108,9 @@ partner does not implement the task or make decisions for the user.
 - Automatic skill selection depends on the host and model. Use the explicit
   call above to request the caller directly. If subagent spawning is
   unavailable, the dialogue will not start.
-- The partner may use the same model or provider. It creates another line of
-  inquiry, not a guarantee of independence, correctness, or improved accuracy.
+- The Rubber Duck may use the same model or provider. It creates another line
+  of inquiry, not a guarantee of independence, correctness, or improved
+  accuracy.
 - The dialogue adds agent turns, time, and token usage. It stops when another
   exchange would not materially improve the result.
 - Review the source before installing and approve tool actions deliberately.
